@@ -1,0 +1,45 @@
+'use client';
+
+import { useAuth } from '@/lib/auth';
+import { useRouter, usePathname } from 'next/navigation';
+import { useEffect } from 'react';
+import Navigation from '@/components/Navigation';
+
+export default function TasksLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const { isAuthenticated, isLoading } = useAuth();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.push('/auth');
+    }
+  }, [isAuthenticated, isLoading, router]);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return null; // Redirect handled by useEffect
+  }
+
+  return (
+    <>
+      <Navigation />
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          {children}
+        </div>
+      </div>
+    </>
+  );
+}

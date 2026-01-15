@@ -1,0 +1,13 @@
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+sqlmodel
+pydantic
+pydantic-settings
+python-dotenv
+PyJWT
+psycopg2-binary
+python-multipart
+passlib[bcrypt]
+python-jose[cryptography]
+better-exceptions
+alembic
