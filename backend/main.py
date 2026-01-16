@@ -49,3 +49,10 @@ def read_root():
 @app.get("/health")
 def health_check():
     return {"status": "healthy"}
+
+
+if __name__ == "__main__":
+    import uvicorn
+    import os
+    port = int(os.environ.get("PORT", 8000))  # Hugging Face uses PORT environment variable
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)
