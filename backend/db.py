@@ -16,6 +16,10 @@ DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@localhost:5
 # Handle Neon SSL requirements
 def setup_ssl_verification(url: str):
     parsed = urlparse(url)
+    # Skip SSL setup for SQLite databases
+    if parsed.scheme == 'sqlite':
+        return url
+
     if parsed.hostname and "neon.tech" in parsed.hostname:
         # For Neon, we need to handle SSL properly
         # Check if sslmode is already specified
@@ -32,13 +36,28 @@ def setup_ssl_verification(url: str):
 DATABASE_URL = setup_ssl_verification(DATABASE_URL)
 
 # Create engine with connection pooling settings appropriate for async applications
-engine = create_engine(
-    DATABASE_URL,
-    pool_size=5,  # Base number of connections
-    max_overflow=10,  # Additional connections beyond pool_size
-    pool_pre_ping=True,  # Verify connections before use
-    pool_recycle=300,  # Recycle connections after 5 minutes
-)
+try:
+    # For Neon PostgreSQL, we may need different connection settings
+    engine_kwargs = {
+        "pool_size": 5,  # Base number of connections
+        "max_overflow": 10,  # Additional connections beyond pool_size
+        "pool_pre_ping": True,  # Verify connections before use
+        "pool_recycle": 300,  # Recycle connections after 5 minutes
+        "echo": True  # Enable SQL logging for debugging
+    }
+
+    # If using PostgreSQL (including Neon), add specific connection parameters
+    if DATABASE_URL.startswith("postgresql://") or DATABASE_URL.startswith("postgres://"):
+        engine_kwargs["pool_pre_reset_isolation_level"] = False
+
+    engine = create_engine(
+        DATABASE_URL,
+        **engine_kwargs
+    )
+    print(f"Database engine created with URL: {DATABASE_URL}")
+except Exception as e:
+    print(f"Error creating database engine: {e}")
+    raise
 
 
 def get_session() -> Generator[Session, None, None]:
@@ -50,10 +69,16 @@ def get_session() -> Generator[Session, None, None]:
 # Create tables if they don't exist
 def create_db_and_tables():
     """Create database tables if they don't exist."""
-    from models import User, Task
-    from sqlmodel import SQLModel
+    try:
+        from models import User, Task
+        from sqlmodel import SQLModel
 
-    SQLModel.metadata.create_all(engine)
+        print("Creating database tables...")
+        SQLModel.metadata.create_all(engine)
+        print("Database tables created successfully!")
+    except Exception as e:
+        print(f"Error creating database tables: {e}")
+        raise
 
 
 # Handle different database types
