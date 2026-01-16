@@ -125,6 +125,7 @@ def get_tasks(
     return TaskListResponse(tasks=task_responses)
 
 
+# This route handles POST to /api/tasks/ (with trailing slash)
 @router.post("/", response_model=TaskResponse, status_code=status.HTTP_201_CREATED)
 def create_task(task_data: TaskCreate, current_user_id: uuid.UUID = Depends(get_current_user_id), session: Session = Depends(get_session)):
     """Create a new task for the authenticated user."""

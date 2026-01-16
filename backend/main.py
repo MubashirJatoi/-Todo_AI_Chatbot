@@ -27,7 +27,8 @@ app = FastAPI(
     version="1.0.0",
     redoc_url="/redoc",
     docs_url="/docs",
-    openapi_url="/openapi.json"
+    openapi_url="/openapi.json",
+    redirect_slashes=False  # Disable to prevent POST redirect issues
 )
 
 # Add CORS middleware for production
