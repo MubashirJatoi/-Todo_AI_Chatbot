@@ -24,22 +24,21 @@ export default function Navigation() {
   }
 
   return (
-    <nav className="bg-white shadow-sm" style={{backgroundImage: "url('https://www.shutterstock.com/image-photo/dark-black-rising-smoke-fog-600nw-2478216311.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed'}}>
-      <div className="max-w-[82%] bg-opacity-80 backdrop-blur-sm mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="bg-white shadow-sm border-b border-gray-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <h1 className="text-xl font-bold text-black">Todo App</h1>
+            <h1 className="text-xl font-bold text-gray-900">Todo App</h1>
           </div>
 
           <div className="flex items-center space-x-4">
-
             {/* User Info */}
             <div className="relative">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="flex items-center space-x-2 text-black hover:text-gray-900 focus:outline-none"
+                className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 focus:outline-none"
               >
-                <span className="font-semibold">{user.name || user.email.split('@')[0]}</span>
+                <span className="font-medium">{user.name || user.email.split('@')[0]}</span>
                 <svg
                   className={`h-5 w-5 transition-transform ${isMenuOpen ? 'rotate-180' : ''}`}
                   xmlns="http://www.w3.org/2000/svg"

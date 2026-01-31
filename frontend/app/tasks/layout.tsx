@@ -15,8 +15,19 @@ export default function TasksLayout({
   const pathname = usePathname();
 
   useEffect(() => {
+    // Redirect if user is not authenticated
     if (!isLoading && !isAuthenticated) {
-      router.push('/auth');
+      router.replace('/auth');
+    }
+  }, [isAuthenticated, isLoading, router]);
+
+  // Additional effect to watch for auth status changes
+  useEffect(() => {
+    if (!isAuthenticated && !isLoading) {
+      const timer = setTimeout(() => {
+        router.replace('/auth');
+      }, 100); // Small delay to ensure state has settled
+      return () => clearTimeout(timer);
     }
   }, [isAuthenticated, isLoading, router]);
 

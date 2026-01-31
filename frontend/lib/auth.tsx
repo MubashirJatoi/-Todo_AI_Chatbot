@@ -29,14 +29,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         } catch (error) {
           console.error('Failed to verify authentication:', error);
           localStorage.removeItem('jwt_token');
+          setUser(null);
           setIsLoading(false);
         }
       } else {
+        setUser(null);
         setIsLoading(false);
       }
     };
 
     checkAuthStatus();
+  }, []);
+
+  // Effect to monitor localStorage changes for jwt_token
+  useEffect(() => {
+    const handleStorageChange = () => {
+      if (!api.isAuthenticated()) {
+        setUser(null);
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, []);
 
   const login = async (email: string, password: string) => {
