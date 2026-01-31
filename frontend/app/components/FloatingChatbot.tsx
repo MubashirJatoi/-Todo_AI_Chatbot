@@ -126,7 +126,7 @@ const FloatingChatbot = () => {
       {/* Floating Chatbot Button */}
       <motion.button
         onClick={toggleChat}
-        className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gray-100 rounded-full shadow-lg flex items-center justify-center cursor-pointer hover:scale-110 transition-all duration-200 group"
+        className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gray-100 rounded-full shadow-lg flex items-center justify-center cursor-pointer hover:scale-110 transition-all duration-200 group md:bottom-6 md:right-6 sm:bottom-4 sm:right-4"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         animate={{
@@ -216,7 +216,7 @@ const FloatingChatbot = () => {
           <>
             {/* Backdrop */}
             <motion.div
-              className="fixed inset-0 bg-black bg-opacity-50 z-40"
+              className="fixed inset-0 bg-black bg-opacity-50 z-40 sm:z-30"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -225,24 +225,24 @@ const FloatingChatbot = () => {
 
             {/* Chat Panel */}
             <motion.div
-              className="fixed bottom-24 right-6 w-full max-w-md h-[500px] bg-white rounded-xl shadow-2xl z-50 flex flex-col overflow-hidden"
+              className="fixed bottom-24 right-6 w-full max-w-md h-[500px] bg-white rounded-xl shadow-2xl z-50 flex flex-col overflow-hidden md:bottom-24 md:right-6 sm:bottom-20 sm:left-0 sm:right-0 sm:w-full sm:h-[70vh]"
               initial={{ y: 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 100, opacity: 0 }}
               transition={{ type: "spring", damping: 25, stiffness: 500 }}
             >
               {/* Header */}
-              <div className="bg-gray-200 p-4 text-black bg-opacity-90 backdrop-blur-sm">
+              <div className="bg-gray-200 p-4 text-black bg-opacity-90 backdrop-blur-sm sm:p-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-gray-500 bg-opacity-20 rounded-full flex items-center justify-center">
+                    <div className="w-8 h-8 bg-gray-500 bg-opacity-20 rounded-full flex items-center justify-center sm:w-7 sm:h-7">
                       <svg
                         width="24"
                         height="24"
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
-                        className="text-black"
+                        className="text-black sm:w-5 sm:h-5"
                       >
                         <rect
                           x="6"
@@ -300,11 +300,11 @@ const FloatingChatbot = () => {
                         />
                       </svg>
                     </div>
-                    <span className="font-semibold">Chatbot</span>
+                    <span className="font-semibold sm:text-sm">Chatbot</span>
                   </div>
                   <button
                     onClick={closeChat}
-                    className="text-white hover:bg-opacity-20 rounded-full p-1 transition-colors"
+                    className="text-white hover:bg-opacity-20 rounded-full p-1 transition-colors sm:p-0.5"
                     aria-label="Close chat"
                   >
                     <svg
@@ -313,7 +313,7 @@ const FloatingChatbot = () => {
                       viewBox="0 0 24 24"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
-                      className="text-black"
+                      className="text-black sm:w-4 sm:h-4"
                     >
                       <path
                         d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"
@@ -325,7 +325,7 @@ const FloatingChatbot = () => {
               </div>
 
               {/* Messages Area */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ backgroundImage: "url('https://st4.depositphotos.com/20547288/37963/i/450/depositphotos_379633208-stock-photo-panoramic-fog-mist-texture-overlays.jpg')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
+              <div className="flex-1 overflow-y-auto p-4 space-y-4 sm:p-3" style={{ backgroundImage: "url('https://st4.depositphotos.com/20547288/37963/i/450/depositphotos_379633208-stock-photo-panoramic-fog-mist-texture-overlays.jpg')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
                 {messages.map((message) => (
                   <motion.div
                     key={message.id}
@@ -334,7 +334,7 @@ const FloatingChatbot = () => {
                     className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
                   >
                     <div
-                      className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
+                      className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl sm:px-3 sm:py-1.5 sm:text-sm ${
                         message.sender === "user"
                           ? "bg-white text-black rounded-br-md"
                           : "bg-white text-gray-800 shadow-sm rounded-bl-md"
@@ -342,14 +342,14 @@ const FloatingChatbot = () => {
                     >
                       <div className="flex items-start space-x-2">
                         {message.sender === "bot" && (
-                          <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 sm:w-5 sm:h-5">
                             <svg
                               width="20"
                               height="20"
                               viewBox="0 0 24 24"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
-                              className="text-black"
+                              className="text-black sm:w-4 sm:h-4"
                             >
                               <rect
                                 x="6"
@@ -419,9 +419,9 @@ const FloatingChatbot = () => {
                           </div>
                         )}
                         <div>
-                          <p className="text-sm text-black">{message.text}</p>
+                          <p className="text-sm text-black sm:text-xs">{message.text}</p>
                           <p
-                            className={`text-xs mt-1 ${message.sender === "user" ? "text-black" : "text-gray-800"}`}
+                            className={`text-xs mt-1 sm:text-xs ${message.sender === "user" ? "text-black" : "text-gray-800"}`}
                           >
                             {message.timestamp.toLocaleTimeString([], {
                               hour: "2-digit",
@@ -430,14 +430,14 @@ const FloatingChatbot = () => {
                           </p>
                         </div>
                         {message.sender === "user" && (
-                          <div className="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <div className="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 sm:w-5 sm:h-5">
                             <svg
                               width="12"
                               height="12"
                               viewBox="0 0 24 24"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
-                              className="text-black"
+                              className="text-black sm:w-4 sm:h-4"
                             >
                               <path
                                 d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z"
@@ -454,7 +454,7 @@ const FloatingChatbot = () => {
               </div>
 
               {/* Input Area */}
-              <div className="border-t border-gray-200 p-4 bg-white bg-opacity-90 backdrop-blur-sm">
+              <div className="border-t border-gray-200 p-4 bg-white bg-opacity-90 backdrop-blur-sm sm:p-3">
                 <div className="flex items-center space-x-2">
                   <div className="flex-1 relative">
                     <textarea
@@ -462,7 +462,7 @@ const FloatingChatbot = () => {
                       onChange={(e) => setInputValue(e.target.value)}
                       onKeyPress={handleKeyPress}
                       placeholder="Type here..."
-                      className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-black resize-none max-h-20"
+                      className="w-full text-black px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-black resize-none max-h-20 sm:px-3 sm:py-1.5 sm:text-sm"
                       rows={1}
                       style={{ minHeight: "40px" }}
                     />
@@ -470,7 +470,7 @@ const FloatingChatbot = () => {
                   <motion.button
                     onClick={handleSendMessage}
                     disabled={!inputValue.trim()}
-                    className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                    className={`w-10 h-10 rounded-full flex items-center justify-center sm:w-9 sm:h-9 ${
                       inputValue.trim()
                         ? "bg-black text-white hover:opacity-90"
                         : "bg-gray-300 text-gray-500 cursor-not-allowed"
@@ -485,7 +485,7 @@ const FloatingChatbot = () => {
                       viewBox="0 0 24 24"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
-                      className="text-current"
+                      className="text-current sm:w-5 sm:h-5"
                     >
                       <path
                         d="M2.01 21L23 12L2.01 3L2 10L17 12L2 14L2.01 21Z"
