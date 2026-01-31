@@ -233,7 +233,7 @@ const FloatingChatbot = () => {
 
             {/* Chat Panel */}
             <motion.div
-              className="fixed top-[10%] m-[2%] -translate-x-1/2 -translate-y-1/2 w-[95%] h-[75vh] md:top-auto md:left-auto md:translate-x-0 md:translate-y-0 md:bottom-24 md:right-6 md:w-full md:max-w-md md:h-[400px] bg-white rounded-xl shadow-2xl z-50 flex flex-col overflow-hidden"
+              className="fixed top-[10%] m-[2%] -translate-x-1/2 -translate-y-1/2 w-[95%] h-[75vh] md:top-auto md:left-auto md:translate-x-0 md:translate-y-0 md:bottom-24 md:right-6 md:w-[25rem] md:max-w-md md:h-[400px] bg-white rounded-xl shadow-2xl z-50 flex flex-col overflow-hidden"
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 100, opacity: 0 }}
               transition={{ type: "spring", damping: 25, stiffness: 500 }}
