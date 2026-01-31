@@ -3,7 +3,7 @@ import json
 from datetime import datetime, timedelta
 import uuid
 
-BASE_URL = "http://localhost:8000"
+BASE_URL = "https://mubashirjatoi-todo-ai-chatbot.hf.space"
 
 def test_auth_endpoints():
     print("Testing authentication endpoints...")

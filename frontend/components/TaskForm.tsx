@@ -94,7 +94,7 @@ export default function TaskForm({ onTaskCreated, onCancel, initialTask }: TaskF
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900 bg-white"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black sm:text-sm text-gray-900 bg-white"
               placeholder="Task title"
               disabled={loading}
             />
@@ -109,7 +109,7 @@ export default function TaskForm({ onTaskCreated, onCancel, initialTask }: TaskF
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900 bg-white"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black sm:text-sm text-gray-900 bg-white"
               placeholder="Task description"
               disabled={loading}
             />
@@ -124,7 +124,7 @@ export default function TaskForm({ onTaskCreated, onCancel, initialTask }: TaskF
               id="priority"
               value={priority}
               onChange={(e) => setPriority(e.target.value as 'low' | 'medium' | 'high')}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900 bg-white"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black sm:text-sm text-gray-900 bg-white"
               disabled={loading}
             >
               <option value="low">Low</option>
@@ -143,7 +143,7 @@ export default function TaskForm({ onTaskCreated, onCancel, initialTask }: TaskF
               id="category"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900 bg-white"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black sm:text-sm text-gray-900 bg-white"
               placeholder="Work, Personal, etc."
               disabled={loading}
             />
@@ -159,7 +159,7 @@ export default function TaskForm({ onTaskCreated, onCancel, initialTask }: TaskF
               id="dueDate"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900 bg-white"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black sm:text-sm text-gray-900 bg-white"
               disabled={loading}
             />
           </div>
@@ -173,7 +173,7 @@ export default function TaskForm({ onTaskCreated, onCancel, initialTask }: TaskF
               id="recurrencePattern"
               value={recurrencePattern}
               onChange={(e) => setRecurrencePattern(e.target.value)}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900 bg-white"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black sm:text-sm text-gray-900 bg-white"
               disabled={loading}
             >
               <option value="">No recurrence</option>
@@ -202,7 +202,7 @@ export default function TaskForm({ onTaskCreated, onCancel, initialTask }: TaskF
               <button
                 type="submit"
                 disabled={loading}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-gray-800 hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:opacity-50"
               >
                 {loading ? (
                   <>

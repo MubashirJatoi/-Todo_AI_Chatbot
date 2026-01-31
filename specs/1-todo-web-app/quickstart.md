@@ -41,7 +41,7 @@ BETTER_AUTH_SECRET="your-super-secret-jwt-key-here-make-it-long-and-random"
 
 ### Frontend (.env.local)
 ```env
-NEXT_PUBLIC_API_URL="http://localhost:8000"
+NEXT_PUBLIC_API_URL="https://mubashirjatoi-todo-ai-chatbot.hf.space"
 NEXTAUTH_URL="http://localhost:3000"
 ```
 
@@ -60,7 +60,7 @@ NEXTAUTH_URL="http://localhost:3000"
 cd backend
 uvicorn main:app --reload
 ```
-Backend will be available at http://localhost:8000
+Backend will be available at https://mubashirjatoi-todo-ai-chatbot.hf.space
 
 2. Start the frontend:
 ```bash
@@ -81,7 +81,7 @@ Once running, you can test the API endpoints:
 
 1. Register a user:
 ```bash
-curl -X POST http://localhost:8000/api/auth/register \
+curl -X POST https://mubashirjatoi-todo-ai-chatbot.hf.space/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{"email": "test@example.com", "password": "password123", "name": "Test User"}'
 ```
@@ -89,12 +89,12 @@ curl -X POST http://localhost:8000/api/auth/register \
 2. Create a task:
 ```bash
 # First, authenticate to get a token
-curl -X POST http://localhost:8000/api/auth/login \
+curl -X POST https://mubashirjatoi-todo-ai-chatbot.hf.space/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email": "test@example.com", "password": "password123"}'
 
 # Then use the token to create a task
-curl -X POST http://localhost:8000/api/tasks \
+curl -X POST https://mubashirjatoi-todo-ai-chatbot.hf.space/api/tasks \
   -H "Authorization: Bearer YOUR_TOKEN_HERE" \
   -H "Content-Type: application/json" \
   -d '{"title": "Sample Task", "description": "Sample Description"}'

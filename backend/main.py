@@ -7,18 +7,28 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from sqlmodel import Session
+from fastapi.security import HTTPBearer
 
 from db import create_db_and_tables, get_session
 from routes import auth_routes as auth, tasks
+from ai_chatbot.routes import chat_routes
 from models import User, Task
+
+# Import rate limiter
+from ai_chatbot.services.rate_limiter import rate_limiter_service
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Create database tables on startup
     create_db_and_tables()
+    # Initialize rate limiter
+    rate_limiter_service.init_app(app)
     yield
 
+
+# Security scheme for Swagger UI
+security_scheme = HTTPBearer()
 
 # Create FastAPI app with lifespan
 app = FastAPI(
@@ -38,7 +48,9 @@ app.add_middleware(
         "https://frontend-xi-five-90.vercel.app",  # Previous deployed frontend
         "http://localhost:3000",  # Local frontend development
         "http://localhost:8000",  # Local backend for testing
-        "https://mubashirjatoi-todo-app-fullstack.hf.space"  # Hugging Face deployment
+        "https://mubashirjatoi-todo-ai-chatbot.hf.space",  # Deployed backend
+        "http://127.0.0.1:3000",  # Alternative localhost for frontend
+        "http://0.0.0.0:3000",    # Alternative localhost for frontend
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -48,6 +60,10 @@ app.add_middleware(
 # Include routers
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(tasks.router, prefix="/api/tasks", tags=["tasks"])
+app.include_router(chat_routes.router, prefix="/api/chatbot", tags=["chatbot"])
+# Include chat routes at /api/chat for frontend compatibility
+from ai_chatbot.routes.chat_routes import router as chat_router
+app.include_router(chat_router, prefix="/api", tags=["chat"])
 
 # Handle both with and without trailing slash to avoid redirect issues for POST requests
 from fastapi import Depends, HTTPException, status

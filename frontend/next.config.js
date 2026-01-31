@@ -4,7 +4,7 @@ const nextConfig = {
     serverComponentsExternalPackages: [],
   },
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://mubashirjatoi-todo-app-fullstack.hf.space',
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://mubashirjatoi-todo-ai-chatbot.hf.space',
   },
 };
 

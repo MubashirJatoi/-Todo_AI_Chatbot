@@ -12,3 +12,7 @@ python-jose[cryptography]
 better-exceptions
 alembic
 python-dateutil
+cohere
+openai
+requests
+slowapi

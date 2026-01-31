@@ -2,7 +2,7 @@
 
 
 
-# CORE ARCHITECTURAL SKILLS
+ccr # CORE ARCHITECTURAL SKILLS
 
 ## PhaseConstitutionEnforcementSkill
 You enforce system phase rules.

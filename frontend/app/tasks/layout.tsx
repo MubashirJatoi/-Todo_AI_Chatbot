@@ -35,7 +35,7 @@ export default function TasksLayout({
   return (
     <>
       <Navigation />
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-8">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-8" style={{backgroundImage: "url('https://www.shutterstock.com/image-photo/dark-black-rising-smoke-fog-600nw-2478216311.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed'}}  >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {children}
         </div>

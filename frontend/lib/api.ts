@@ -32,16 +32,8 @@ class ApiClient {
 
   constructor() {
     // Ensure the base URL is properly formed
-    let baseURL = process.env.NEXT_PUBLIC_API_URL || 'https://mubashirjatoi-todo-app-fullstack.hf.space';
-
-    // For production, ensure we're using the correct backend URL
-    if (typeof window !== 'undefined') {
-      // Client-side runtime check
-      if (window.location.hostname === 'frontend-xi-five-90.vercel.app' ||
-          window.location.hostname === 'fullstack-todo-hackathon-2-phase-2.vercel.app') {
-        baseURL = 'https://mubashirjatoi-todo-app-fullstack.hf.space';
-      }
-    }
+    // Use environment variable if set, otherwise use localhost as default
+    let baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
     console.log('API Base URL:', baseURL); // Debug logging
 
@@ -164,6 +156,19 @@ class ApiClient {
     return response.data;
   }
 
+  // Chatbot methods
+  async sendChatMessage(message: string, token: string): Promise<any> {
+    // Use the AI chatbot endpoint
+    const response = await this.client.post('/api/chat', {
+      message: message
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  }
+
   // Check if user is authenticated
   isAuthenticated(): boolean {
     return !!localStorage.getItem('jwt_token');
@@ -172,3 +177,8 @@ class ApiClient {
 
 export const api = new ApiClient();
 export type { Task, User, AuthResponse };
+
+// Export individual functions for direct use
+export const sendChatMessage = async (message: string, token: string) => {
+  return await api.sendChatMessage(message, token);
+};
