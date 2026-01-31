@@ -50,7 +50,7 @@ A full-stack todo application with Next.js frontend, FastAPI backend, and Neon P
    ```bash
    uvicorn main:app --reload
    ```
-   The backend will be available at `http://localhost:8000`
+   The backend will be available at `https://mubashirjatoi-todo-ai-chatbot.hf.space`
 
 ### Frontend Setup
 
@@ -66,7 +66,7 @@ A full-stack todo application with Next.js frontend, FastAPI backend, and Neon P
 
 3. Create a `.env.local` file with the following content:
    ```
-   NEXT_PUBLIC_API_URL=http://localhost:8000
+   NEXT_PUBLIC_API_URL=https://mubashirjatoi-todo-ai-chatbot.hf.space
    ```
 
 4. Start the development server:
@@ -144,3 +144,4 @@ To verify the user isolation works correctly:
 1. Create two user accounts (User A and User B)
 2. Create tasks for each user
 3. Verify that User A can only see their own tasks and not User B's tasks, and vice versa"# fullstack-todo-hackathon-2-phase-2" 
+# -Todo_AI_Chatbot
