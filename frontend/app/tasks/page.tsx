@@ -53,6 +53,21 @@ export default function TasksPage() {
     }
   }, [isAuthenticated, isLoading, router]);
 
+  // Listen for task creation events from the chatbot
+  useEffect(() => {
+    const handleTaskCreated = () => {
+      if (loadTasksRef.current) {
+        loadTasksRef.current();
+      }
+    };
+
+    window.addEventListener('taskCreated', handleTaskCreated);
+
+    return () => {
+      window.removeEventListener('taskCreated', handleTaskCreated);
+    };
+  }, []);
+
   // Debounce function for search and filter changes
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 

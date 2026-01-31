@@ -93,6 +93,14 @@ const FloatingChatbot = () => {
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, botResponse]);
+
+      // Check if the response indicates a task was created and trigger a refresh
+      // Look for keywords that indicate task creation
+      const lowerCaseResponse = responseText.toLowerCase();
+      if (lowerCaseResponse.includes("task") && (lowerCaseResponse.includes("created") || lowerCaseResponse.includes("added"))) {
+        // Dispatch a custom event to notify other parts of the app to refresh tasks
+        window.dispatchEvent(new CustomEvent('taskCreated'));
+      }
     } catch (error) {
       console.error('Error sending message to chatbot:', error);
 
