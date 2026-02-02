@@ -68,6 +68,59 @@ export default function TasksPage() {
     };
   }, []);
 
+  // Listen for task deletion events from the chatbot
+  useEffect(() => {
+    const handleTaskDeleted = (event: any) => {
+      const taskTitle = event.detail?.taskTitle;
+
+      // If we have the task title, remove it from the local state immediately for instant UI update
+      if (taskTitle) {
+        setTasks(prevTasks => prevTasks.filter(task => task.title.toLowerCase() !== taskTitle.toLowerCase()));
+      }
+
+      // Then reload from server to ensure consistency
+      if (loadTasksRef.current) {
+        loadTasksRef.current();
+      }
+    };
+
+    window.addEventListener('taskDeleted', handleTaskDeleted);
+
+    return () => {
+      window.removeEventListener('taskDeleted', handleTaskDeleted);
+    };
+  }, []);
+
+  // Listen for task update events from the chatbot
+  useEffect(() => {
+    const handleTaskUpdated = (event: any) => {
+      const taskTitle = event.detail?.taskTitle;
+      const completed = event.detail?.completed;
+
+      // If we have the task title, update it in the local state immediately for instant UI update
+      if (taskTitle) {
+        setTasks(prevTasks =>
+          prevTasks.map(task =>
+            task.title.toLowerCase() === taskTitle.toLowerCase()
+              ? { ...task, completed: completed !== undefined ? completed : task.completed }
+              : task
+          )
+        );
+      }
+
+      // Then reload from server to ensure consistency
+      if (loadTasksRef.current) {
+        loadTasksRef.current();
+      }
+    };
+
+    window.addEventListener('taskUpdated', handleTaskUpdated);
+
+    return () => {
+      window.removeEventListener('taskUpdated', handleTaskUpdated);
+    };
+  }, []);
+
   // Debounce function for search and filter changes
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
@@ -89,7 +142,7 @@ export default function TasksPage() {
   };
 
   const handleTaskUpdated = (updatedTask: Task) => {
-    setTasks(tasks.map(task => task.id === updatedTask.id ? updatedTask : task));
+    setTasks(prevTasks => prevTasks.map(task => task.id === updatedTask.id ? updatedTask : task));
   };
 
   const handleTaskDeleted = (deletedTaskId: string) => {
@@ -98,10 +151,26 @@ export default function TasksPage() {
 
   const handleToggleComplete = async (taskId: string, completed: boolean) => {
     try {
+      // Optimistically update the UI first for immediate feedback
+      setTasks(prevTasks =>
+        prevTasks.map(task =>
+          task.id === taskId ? { ...task, completed } : task
+        )
+      );
+
+      // Then call the API to persist the change
       const updatedTask = await api.toggleTaskCompletion(taskId, completed);
+
+      // Update with the server response to ensure consistency
       handleTaskUpdated(updatedTask);
     } catch (error) {
       console.error('Error updating task completion:', error);
+      // If API call fails, revert the optimistic update
+      setTasks(prevTasks =>
+        prevTasks.map(task =>
+          task.id === taskId ? { ...task, completed: !completed } : task
+        )
+      );
     }
   };
 

@@ -60,6 +60,49 @@ class EntityExtractor:
                 entities['task_title'] = task_title
                 break
 
+        # Extract update patterns - for changing specific attributes of tasks
+        update_patterns = [
+            r'(?:update|change|modify)\s+(?:the\s+)?(\w+)\s+of\s+(?:task|the)\s+(.*?)(?:\s+to|\s+as)\s+(.+?)(?:\.|$)',
+            r'(?:update|change|modify)\s+(?:the\s+)?(\w+)\s+(?:to|as)\s+(.+?)(?:\.|$)',
+            r'(?:update|change|modify)\s+(?:task\s+)?(.+?)\s+(?:title|name)\s+(?:to|as)\s+(.+?)(?:\.|$)',
+            r'(?:update|change|modify)\s+(?:task\s+)?(.+?)\s+(?:description)\s+(?:to|as)\s+(.+?)(?:\.|$)',
+            r'(?:update|change|modify)\s+(?:task\s+)?(.+?)\s+(?:priority)\s+(?:to|as)\s+(.+?)(?:\.|$)',
+            r'(?:update|change|modify)\s+(?:task\s+)?(.+?)\s+(?:due date|date)\s+(?:to|as)\s+(.+?)(?:\.|$)',
+        ]
+
+        for pattern in update_patterns:
+            match = re.search(pattern, text, re.IGNORECASE)
+            if match:
+                if len(match.groups()) >= 2:
+                    # Pattern like "update priority of task X to Y" or "update X priority to Y"
+                    if len(match.groups()) == 3:
+                        attr = match.group(1).strip()
+                        search_term = match.group(2).strip()
+                        new_value = match.group(3).strip()
+                    elif len(match.groups()) == 2:
+                        # Pattern like "update title to X" or "change priority to Y"
+                        attr = match.group(1).strip()
+                        new_value = match.group(2).strip()
+                        search_term = entities.get('task_title', entities.get('search_term', ''))
+
+                    # Map attribute names to the appropriate entity keys
+                    attr_map = {
+                        'title': 'title',
+                        'name': 'title',
+                        'description': 'description',
+                        'priority': 'priority',
+                        'due date': 'due_date',
+                        'date': 'due_date',
+                        'category': 'category'
+                    }
+
+                    if attr.lower() in attr_map:
+                        entities[attr_map[attr.lower()]] = new_value
+
+                    if search_term:
+                        entities['search_term'] = search_term
+                break
+
         # Extract search terms
         search_patterns = [
             r'(?:find|search|look.*for|show.*me).*?(?:tasks?|items?)\s+(?:containing|about|with|like)\s+([^!.?]+?)(?:\.|$)',

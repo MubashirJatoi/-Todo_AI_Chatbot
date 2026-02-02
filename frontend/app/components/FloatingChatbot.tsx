@@ -94,12 +94,38 @@ const FloatingChatbot = () => {
       };
       setMessages((prev) => [...prev, botResponse]);
 
-      // Check if the response indicates a task was created and trigger a refresh
-      // Look for keywords that indicate task creation
+      // Check if the response indicates a task operation and trigger a refresh
+      // Look for keywords that indicate task operations
       const lowerCaseResponse = responseText.toLowerCase();
+
       if (lowerCaseResponse.includes("task") && (lowerCaseResponse.includes("created") || lowerCaseResponse.includes("added"))) {
         // Dispatch a custom event to notify other parts of the app to refresh tasks
         window.dispatchEvent(new CustomEvent('taskCreated'));
+      } else if (lowerCaseResponse.includes("task") && (lowerCaseResponse.includes("deleted") || lowerCaseResponse.includes("removed"))) {
+        // Dispatch a custom event to notify other parts of the app to refresh tasks after deletion
+        // Extract task title from the response for immediate UI update
+        const titleMatch = responseText.match(/task\s+['"]([^'"]+)['"]/i);
+        const taskTitle = titleMatch ? titleMatch[1] : null;
+
+        window.dispatchEvent(new CustomEvent('taskDeleted', {
+          detail: { taskTitle: taskTitle } // Pass the task title if available
+        }));
+      } else if (lowerCaseResponse.includes("task") && (lowerCaseResponse.includes("updated") || lowerCaseResponse.includes("modified") || lowerCaseResponse.includes("changed"))) {
+        // Dispatch a custom event to notify other parts of the app to refresh tasks after update
+        const titleMatch = responseText.match(/task\s+['"]([^'"]+)['"]/i);
+        const taskTitle = titleMatch ? titleMatch[1] : null;
+
+        window.dispatchEvent(new CustomEvent('taskUpdated', {
+          detail: { taskTitle: taskTitle } // Pass the task title if available
+        }));
+      } else if (lowerCaseResponse.includes("task") && lowerCaseResponse.includes("complete")) {
+        // Dispatch a custom event to notify other parts of the app to refresh tasks after completion
+        const titleMatch = responseText.match(/task\s+['"]([^'"]+)['"]/i);
+        const taskTitle = titleMatch ? titleMatch[1] : null;
+
+        window.dispatchEvent(new CustomEvent('taskUpdated', {
+          detail: { taskTitle: taskTitle, completed: true } // Mark as completed
+        }));
       }
     } catch (error) {
       console.error('Error sending message to chatbot:', error);

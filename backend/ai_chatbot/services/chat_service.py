@@ -31,6 +31,18 @@ class ChatbotService:
                 r'add\s+(.+)',
                 r'create\s+(.+)',
             ],
+            'update': [
+                r'(?:update|change|modify|edit)\s+(?:the\s+)?task\s+(.+?)\s+(?:title|name)\s+(?:to|as)\s+(.+)',
+                r'(?:update|change|modify|edit)\s+(?:the\s+)?task\s+(.+?)\s+(?:description)\s+(?:to|as)\s+(.+)',
+                r'(?:update|change|modify|edit)\s+(?:the\s+)?task\s+(.+?)\s+(?:priority)\s+(?:to|as)\s+(.+)',
+                r'(?:update|change|modify|edit)\s+(?:the\s+)?task\s+(.+?)\s+(?:due date|date)\s+(?:to|as)\s+(.+)',
+                r'(?:update|change|modify|edit)\s+(?:the\s+)?(.+?)\s+(?:title|name)\s+(?:to|as)\s+(.+)',
+                r'(?:update|change|modify|edit)\s+(?:the\s+)?(.+?)\s+(?:description)\s+(?:to|as)\s+(.+)',
+                r'(?:update|change|modify|edit)\s+(?:the\s+)?(.+?)\s+(?:priority)\s+(?:to|as)\s+(.+)',
+                r'(?:update|change|modify|edit)\s+(?:the\s+)?(.+?)\s+(?:due date|date)\s+(?:to|as)\s+(.+)',
+                r'(?:update|change|modify|edit)\s+(?:the\s+)?task\s+(.+)',
+                r'(?:update|change|modify|edit)\s+(?:the\s+)?(.+)',
+            ],
             'complete': [
                 r'complete.*task.*(.+)',
                 r'finish.*task.*(.+)',
@@ -77,6 +89,34 @@ class ChatbotService:
                     if operation == 'create':
                         # For create operations, treat the extracted text as the task title
                         return operation, {'title': extracted_text}
+                    elif operation == 'update':
+                        # For update operations, extract based on the matched pattern
+                        if match.groups():
+                            if len(match.groups()) == 2:
+                                # Pattern captured both task identifier and new value
+                                task_identifier = match.group(1).strip()
+                                new_value = match.group(2).strip()
+
+                                # Determine what attribute is being updated based on the original message
+                                message_lower = message.lower()
+                                if 'title' in message_lower or 'name' in message_lower:
+                                    return operation, {'search_term': task_identifier, 'title': new_value}
+                                elif 'description' in message_lower:
+                                    return operation, {'search_term': task_identifier, 'description': new_value}
+                                elif 'priority' in message_lower:
+                                    return operation, {'search_term': task_identifier, 'priority': new_value}
+                                elif 'due date' in message_lower or 'date' in message_lower:
+                                    return operation, {'search_term': task_identifier, 'due_date': new_value}
+                                else:
+                                    # If not clear what to update, return both parts
+                                    return operation, {'search_term': task_identifier, 'title': new_value}
+                            elif len(match.groups()) == 1:
+                                # Pattern captured only one element (likely the task identifier)
+                                task_identifier = match.group(1).strip()
+                                return operation, {'search_term': task_identifier}
+                        else:
+                            # If no groups, use the full match
+                            return operation, {'search_term': extracted_text}
                     elif operation in ['complete', 'delete']:
                         # For complete/delete, we need to find the task by title
                         return operation, {'search_term': extracted_text}
@@ -125,6 +165,16 @@ class ChatbotService:
             title=search_term
         )
 
+    def update_task_request(self, search_term: str, **kwargs) -> TaskOperationRequest:
+        """
+        Create a task operation request for updating a task.
+        """
+        return TaskOperationRequest(
+            operation='update',
+            title=search_term,
+            **kwargs
+        )
+
     def process_message(self, message: str, session: Session, user_id: UUID) -> str:
         """
         Process a natural language message and return a response.
@@ -164,6 +214,41 @@ class ChatbotService:
                     return f"I couldn't find any tasks containing '{search_term}'."
             except Exception as e:
                 return f"Sorry, I couldn't complete the task: {str(e)}"
+
+        elif intent == 'update':
+            search_term = entities.get('search_term', '')
+            try:
+                # Find tasks matching the search term
+                tasks = get_user_tasks_service(session, user_id, search=search_term)
+                if tasks:
+                    # Update the first matching task
+                    task_to_update = tasks[0]
+
+                    # Prepare update data based on entities
+                    title = entities.get('title')
+                    description = entities.get('description')
+                    priority = entities.get('priority')
+                    due_date_str = entities.get('due_date')
+
+                    # Call update service with the collected update data
+                    updated_task = update_task_service(
+                        session=session,
+                        task_id=task_to_update.id,
+                        user_id=user_id,
+                        title=title,
+                        description=description,
+                        priority=priority,
+                        due_date=due_date_str
+                    )
+
+                    if updated_task:
+                        return f"I've updated the task '{updated_task.title}'."
+                    else:
+                        return f"I couldn't update the task '{task_to_update.title}'."
+                else:
+                    return f"I couldn't find any tasks containing '{search_term}'."
+            except Exception as e:
+                return f"Sorry, I couldn't update the task: {str(e)}"
 
         elif intent == 'delete':
             search_term = entities.get('search_term', '')

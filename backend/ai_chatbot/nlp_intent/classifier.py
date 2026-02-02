@@ -50,7 +50,10 @@ class IntentClassifier:
                 'add.*task', 'create.*task', 'new.*task', 'make.*task', 'add', 'create'
             ],
             IntentType.UPDATE_TASK: [
-                'update.*task', 'modify.*task', 'change.*task'
+                'update.*task', 'modify.*task', 'change.*task', 'update', 'modify', 'change',
+                'edit.*task', 'edit', 'update.*title', 'update.*description', 'update.*priority',
+                'change.*title', 'change.*description', 'change.*priority', 'modify.*title',
+                'modify.*description', 'modify.*priority'
             ],
             IntentType.DELETE_TASK: [
                 'delete.*task', 'remove.*task', 'drop.*task', 'delete', 'remove'
